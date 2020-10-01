@@ -1,3 +1,4 @@
+import sys
 import requests
 from bs4 import BeautifulSoup
 
@@ -8,7 +9,10 @@ html = response.content
 
 soup = BeautifulSoup(html,"html.parser")
 
-a = float(input("Raitingi giriniz:"))
+if len(sys.argv) > 1:
+    min_rating = float(sys.argv[1]) 
+else:
+    min_rating = float(input("Raitingi giriniz:"))
 
 basliklar = soup.find_all("td",{"class":"titleColumn"})
 ratingler =  soup.find_all("td",{"class":"ratingColumn imdbRating"})
@@ -24,5 +28,5 @@ for baslik,rating in zip(basliklar,ratingler):
     rating = rating.strip()
     rating = rating.replace("\n", "")
 
-    if (float(rating) > a):
+    if (float(rating) > min_rating):
         print("Filmin ismi: {} Filmin ratingi: {} ".format(baslik,rating))
